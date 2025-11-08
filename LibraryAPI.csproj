@@ -18,7 +18,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <Folder Include="Images\Covers\" />
+    <Folder Include="Images\Authors\" />
+    <Folder Include="Images\Users\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Controllers\Auth\AuthController.cs" />
   </ItemGroup>
 
 </Project>

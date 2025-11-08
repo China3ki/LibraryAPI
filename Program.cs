@@ -1,4 +1,8 @@
 
+using LibraryAPI.Controllers;
+using LibraryAPI.Entities;
+using LibraryAPI.Services;
+using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
 namespace LibraryAPI
@@ -14,6 +18,20 @@ namespace LibraryAPI
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
+
+            // SQL version
+            var version = new MySqlServerVersion(new Version(10, 4, 32));
+
+            // DB context
+            builder.Services.AddDbContext<LibraryContext>(option =>
+                option.UseMySql(builder.Configuration.GetConnectionString("Default"), version)
+            );
+
+            // Context
+            builder.Services.AddScoped<AuthService>();
+            builder.Services.AddScoped<HasherService>();
+            builder.Services.AddSingleton<UploadService>();
+
 
             var app = builder.Build();
 

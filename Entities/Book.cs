@@ -19,11 +19,11 @@ public partial class Book
 
     public int? BookAmount { get; set; }
 
+    public string? BookCover { get; set; }
+
     public virtual Author? BookAuthor { get; set; }
 
     public virtual Category? BookCategory { get; set; }
-
-    public virtual ICollection<BooksImage> BooksImages { get; set; } = new List<BooksImage>();
 
     public virtual ICollection<BooksLeased> BooksLeaseds { get; set; } = new List<BooksLeased>();
 

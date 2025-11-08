@@ -20,8 +20,6 @@ public partial class LibraryContext : DbContext
 
     public virtual DbSet<Book> Books { get; set; }
 
-    public virtual DbSet<BooksImage> BooksImages { get; set; }
-
     public virtual DbSet<BooksLeased> BooksLeaseds { get; set; }
 
     public virtual DbSet<BooksReview> BooksReviews { get; set; }
@@ -53,6 +51,9 @@ public partial class LibraryContext : DbContext
             entity.Property(e => e.AuthorId)
                 .HasColumnType("int(11)")
                 .HasColumnName("author_id");
+            entity.Property(e => e.AuthorImage)
+                .HasColumnType("text")
+                .HasColumnName("author_image");
             entity.Property(e => e.AuthorName)
                 .HasMaxLength(50)
                 .HasColumnName("author_name");
@@ -83,6 +84,9 @@ public partial class LibraryContext : DbContext
             entity.Property(e => e.BookCategoryId)
                 .HasColumnType("int(11)")
                 .HasColumnName("book_category_id");
+            entity.Property(e => e.BookCover)
+                .HasColumnType("text")
+                .HasColumnName("book_cover");
             entity.Property(e => e.BookDescription)
                 .HasColumnType("text")
                 .HasColumnName("book_description");
@@ -100,29 +104,6 @@ public partial class LibraryContext : DbContext
             entity.HasOne(d => d.BookCategory).WithMany(p => p.Books)
                 .HasForeignKey(d => d.BookCategoryId)
                 .HasConstraintName("fk_book_category_id");
-        });
-
-        modelBuilder.Entity<BooksImage>(entity =>
-        {
-            entity.HasKey(e => e.ImageId).HasName("PRIMARY");
-
-            entity.ToTable("books_images");
-
-            entity.HasIndex(e => e.ImageBookId, "fk_image_book_id");
-
-            entity.Property(e => e.ImageId)
-                .HasColumnType("int(11)")
-                .HasColumnName("image_id");
-            entity.Property(e => e.ImageBookId)
-                .HasColumnType("int(11)")
-                .HasColumnName("image_book_id");
-            entity.Property(e => e.ImagePath)
-                .HasColumnType("text")
-                .HasColumnName("image_path");
-
-            entity.HasOne(d => d.ImageBook).WithMany(p => p.BooksImages)
-                .HasForeignKey(d => d.ImageBookId)
-                .HasConstraintName("fk_image_book_id");
         });
 
         modelBuilder.Entity<BooksLeased>(entity =>
@@ -219,6 +200,9 @@ public partial class LibraryContext : DbContext
             entity.Property(e => e.UserEmail)
                 .HasMaxLength(50)
                 .HasColumnName("user_email");
+            entity.Property(e => e.UserImage)
+                .HasColumnType("text")
+                .HasColumnName("user_image");
             entity.Property(e => e.UserJoiningDate).HasColumnName("user_joiningDate");
             entity.Property(e => e.UserName)
                 .HasMaxLength(50)

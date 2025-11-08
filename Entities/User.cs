@@ -21,6 +21,8 @@ public partial class User
 
     public int? UserType { get; set; }
 
+    public string? UserImage { get; set; }
+
     public virtual ICollection<BooksLeased> BooksLeaseds { get; set; } = new List<BooksLeased>();
 
     public virtual ICollection<BooksReview> BooksReviews { get; set; } = new List<BooksReview>();
