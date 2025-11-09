@@ -40,6 +40,7 @@ namespace LibraryAPI.Controllers
             if (query.Count == 0) return NotFound();
             else return Ok(query);
         }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBook(int id)
         {
@@ -47,10 +48,11 @@ namespace LibraryAPI.Controllers
             if (book == null) return NotFound();
             else return Ok(book);
         }
+
         [HttpPost]
-        public async Task<IActionResult> AddBook(BookModel newBook) 
+        public async Task<IActionResult> AddBook([Required] BookDto newBook) 
         {
-            string pathfile = await service.UploadCover(newBook.Title, newBook.Image, ImageType.Author);
+            string pathfile = await service.Upload(newBook.Title, newBook.Image, ImageType.Author);
             Book book = new Book
             {
                 BookTitle = newBook.Title,

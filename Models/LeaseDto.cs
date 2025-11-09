@@ -1,6 +1,6 @@
 ﻿namespace LibraryAPI.Models
 {
-    public class LeaseModel
+    public class LeaseDto
     {
         public int UserId { get; set; }
         public int BookId { get; set; }

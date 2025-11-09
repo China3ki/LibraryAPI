@@ -11,7 +11,7 @@ namespace LibraryAPI.Controllers.Auth
     public class AuthRegister(LibraryContext ctx, AuthService service, HasherService hasher) : ControllerBase
     {
         [HttpPost("register")]
-        public async Task<IActionResult> Register([Required] RegisterModel user)
+        public async Task<IActionResult> Register([Required] RegisterDto user)
         {
             if (String.IsNullOrEmpty(user.Nickname)) return Conflict("Nickname cannot be null");
             if (String.IsNullOrEmpty(user.Email)) return Conflict("Email cannot be null!");
@@ -31,7 +31,7 @@ namespace LibraryAPI.Controllers.Auth
             return Created();
         }
         [HttpPost("login")]
-        public async Task<IActionResult> Login([Required] LoginModel user)
+        public async Task<IActionResult> Login([Required] LoginDto user)
         {
             if (!service.VerifyAccount(user.Email).Result) return Unauthorized("Account does not exist!");
             string password = await service.GetPasswordDb(user.Email);

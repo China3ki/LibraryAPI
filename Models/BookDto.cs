@@ -2,12 +2,12 @@
 
 namespace LibraryAPI.Models
 {
-    public class BookModel
+    public class BookDto
     {
-        [StringLength(50, MinimumLength = 5)]
-        public string Title { get; set; }
+        [StringLength(50)]
+        public string Title { get; set; } = string.Empty;
         [MinLength(5)]
-        public string Description { get; set; }
+        public string Description { get; set; } = string.Empty;
         public int CategoryId { get; set; }
         public int AuthorId { get; set; }
         public short ReleaseDate { get; set; }

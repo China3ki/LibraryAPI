@@ -3,7 +3,7 @@
     public enum ImageType { Cover, Author, User }
     public class UploadService
     {
-        public async Task<string> UploadCover(string filename, IFormFile file, ImageType imageType)
+        public async Task<string> Upload(string filename, IFormFile file, ImageType imageType)
         {
             var fileExtension = Path.GetExtension(file.FileName);
             string directory = imageType switch

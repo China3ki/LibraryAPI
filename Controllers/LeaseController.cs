@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace LibraryAPI.Controllers
 {
@@ -26,7 +27,7 @@ namespace LibraryAPI.Controllers
             else return Ok(lease);
         }
         [HttpPost]
-        public async Task<IActionResult> AddLease(LeaseModel newLease)
+        public async Task<IActionResult> AddLease([Required] LeaseDto newLease)
         {
             var checkIfUserExist = await ctx.Users.FirstOrDefaultAsync(u => u.UserId == newLease.UserId);
             if (checkIfUserExist == null) return BadRequest();

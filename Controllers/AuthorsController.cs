@@ -26,10 +26,10 @@ namespace LibraryAPI.Controllers
             else return Ok(author);
         }
         [HttpPost]
-        public async Task<IActionResult> AddAuthor([Required] AuthorModel newAuthor)
+        public async Task<IActionResult> AddAuthor([Required] AuthorDto newAuthor)
         {
             string? filepath = null;
-            filepath = await service.UploadCover($"{newAuthor.Name} {newAuthor.Surname}", newAuthor.Image, ImageType.Author);
+            filepath = await service.Upload($"{newAuthor.Name} {newAuthor.Surname}", newAuthor.Image, ImageType.Author);
             Author author = new Author
             {
                 AuthorName = newAuthor.Name,
