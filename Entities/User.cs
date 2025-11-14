@@ -29,5 +29,9 @@ public partial class User
 
     public virtual UsersType? UserTypeNavigation { get; set; }
 
+    public virtual ICollection<UsersFollower> UsersFollowerUserFolloweds { get; set; } = new List<UsersFollower>();
+
+    public virtual ICollection<UsersFollower> UsersFollowerUserFollows { get; set; } = new List<UsersFollower>();
+
     public virtual ICollection<UsersReaded> UsersReadeds { get; set; } = new List<UsersReaded>();
 }

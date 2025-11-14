@@ -28,13 +28,11 @@ public partial class LibraryContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
+    public virtual DbSet<UsersFollower> UsersFollowers { get; set; }
+
     public virtual DbSet<UsersReaded> UsersReadeds { get; set; }
 
     public virtual DbSet<UsersType> UsersTypes { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySql("server=localhost;uid=user;database=library", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.4.32-mariadb"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -223,6 +221,35 @@ public partial class LibraryContext : DbContext
             entity.HasOne(d => d.UserTypeNavigation).WithMany(p => p.Users)
                 .HasForeignKey(d => d.UserType)
                 .HasConstraintName("fk_user_type");
+        });
+
+        modelBuilder.Entity<UsersFollower>(entity =>
+        {
+            entity.HasKey(e => e.FollowId).HasName("PRIMARY");
+
+            entity.ToTable("users_followers");
+
+            entity.HasIndex(e => e.UserFollowId, "fk_follow_user");
+
+            entity.HasIndex(e => e.UserFollowedId, "fk_followed_user");
+
+            entity.Property(e => e.FollowId)
+                .HasColumnType("int(11)")
+                .HasColumnName("follow_id");
+            entity.Property(e => e.UserFollowId)
+                .HasColumnType("int(11)")
+                .HasColumnName("user_follow_id");
+            entity.Property(e => e.UserFollowedId)
+                .HasColumnType("int(11)")
+                .HasColumnName("user_followed_id");
+
+            entity.HasOne(d => d.UserFollow).WithMany(p => p.UsersFollowerUserFollows)
+                .HasForeignKey(d => d.UserFollowId)
+                .HasConstraintName("fk_follow_user");
+
+            entity.HasOne(d => d.UserFollowed).WithMany(p => p.UsersFollowerUserFolloweds)
+                .HasForeignKey(d => d.UserFollowedId)
+                .HasConstraintName("fk_followed_user");
         });
 
         modelBuilder.Entity<UsersReaded>(entity =>

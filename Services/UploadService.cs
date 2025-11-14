@@ -13,10 +13,10 @@
                 ImageType.Author => "Authors",
                 _ => throw new NotImplementedException()
             };
-            var path = Path.Combine($"{Directory.GetCurrentDirectory()}", "Images", directory, $"{filename}.{fileExtension}");
+            var path = Path.Combine("wwwroot", "Images", directory, $"{filename}.{fileExtension}");
             using (var stream = new FileStream(path, FileMode.Create))
             await file.CopyToAsync(stream);
-            return $"{path}";
+            return Path.Combine("https://localhost:7051/", "Images", directory, $"{filename}.{fileExtension}"); ;
         }
     }
 }

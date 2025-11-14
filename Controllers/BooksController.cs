@@ -14,7 +14,7 @@ namespace LibraryAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetBooks(int? categoryId, string? bookTitle, int? startRate, int? endRate, int? startDate, int? endDate, string? sortBy, int? limit,  bool desc = false)
         {
-            var books = ctx.Books.Select(b => new { b.BookId, b.BookTitle, b.BookDescription, b.BookCategoryId, b.BookAuthor.AuthorName, b.BookAuthor.AuthorSurname, b.BookCategory.CategoryName, b.BookReleaseDate, AverateRate = b.BooksReviews.Where(r => r.ReviewBookId == b.BookId).Select(r => r.ReviewRate).Average() }).AsQueryable();
+            var books = ctx.Books.Select(b => new { b.BookId, b.BookTitle, b.BookDescription, b.BookCategoryId, b.BookAuthor.AuthorName, b.BookAuthor.AuthorSurname, b.BookCategory.CategoryName, b.BookReleaseDate, b.BookCover, AverateRate = b.BooksReviews.Where(r => r.ReviewBookId == b.BookId).Select(r => r.ReviewRate).Average() }).AsQueryable();
             
             if (categoryId != null) books = books.Where(b => b.BookCategoryId == categoryId);
             if (!String.IsNullOrEmpty(bookTitle)) books = books.Where(b => b.BookTitle.Contains(bookTitle));
@@ -35,12 +35,18 @@ namespace LibraryAPI.Controllers
                     _ => books
                 };
             }
-            if (limit != null) books.Take((int)limit);
+            if (limit != null) books = books.Take((int)limit);
             var query = await books.ToListAsync();
             if (query.Count == 0) return NotFound();
             else return Ok(query);
         }
-
+        [HttpGet("search/{title}")]
+        public async Task<IActionResult> GetBookForSearch(string title) 
+        {
+            var books = await ctx.Books.Where(b => b.BookTitle.Contains(title)).Select(b => new { b.BookId, b.BookTitle, b.BookAuthor.AuthorName, b.BookAuthor.AuthorSurname, b.BookCover, AverateRate = b.BooksReviews.Where(r => r.ReviewBookId == b.BookId).Select(r => r.ReviewRate).Average(), WantsToRead = b.UsersReadeds.Count(w => w.ReadBookId == b.BookId) }).Take(5).ToListAsync();
+            if (books.Count == 0) return NotFound();
+            else return Ok(books);
+        }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBook(int id)
         {

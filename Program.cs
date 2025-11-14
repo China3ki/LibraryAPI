@@ -19,6 +19,17 @@ namespace LibraryAPI
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
 
+            // Cors policy
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(policy =>
+                {
+                    policy.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+                });
+            });
+
             // SQL version
             var version = new MySqlServerVersion(new Version(10, 4, 32));
 
@@ -42,10 +53,15 @@ namespace LibraryAPI
                 app.MapScalarApiReference();
             }
 
+            app.UseCors();
+
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
+            // Static files
+            app.UseStaticFiles();
+            app.MapStaticAssets();
+            app.UseDefaultFiles();
 
             app.MapControllers();
 
