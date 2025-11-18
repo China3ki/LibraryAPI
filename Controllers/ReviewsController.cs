@@ -12,7 +12,7 @@ namespace LibraryAPI.Controllers
         [HttpGet("{limit}")]
         public async Task<IActionResult> GetReviews(int limit)
         {
-            var reviews = await ctx.BooksReviews.Select(r => new { r.ReviewId, r.ReviewText, r.ReviewRate, r.ReviewUser.UserId, r.ReviewUser.UserNick, r.ReviewUser.UserImage }).Take(limit).ToListAsync();
+            var reviews = await ctx.BooksReviews.Select(r => new { r.ReviewId, r.ReviewText, r.ReviewRate, r.ReviewBookId, r.ReviewBook.BookTitle, r.ReviewUser.UserId, r.ReviewUser.UserNick, r.ReviewUser.UserImage }).Take(limit).ToListAsync();
             if (reviews.Count == 0) return NotFound();
             else return Ok(reviews);
         }

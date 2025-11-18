@@ -12,14 +12,14 @@ namespace LibraryAPI.Controllers
     [ApiController]
     public class UsersController(LibraryContext ctx, UploadService service) : ControllerBase
     {
-
-        [HttpGet("search/{nick}")]
-        public async Task<IActionResult> GetUser(string nick)
+        [HttpGet("{userId}")]
+        public async Task<IActionResult> GetUser(int userId)
         {
-            var users = await ctx.Users.Where(u => u.UserNick.Contains(nick)).Select(u => new { u.UserId, u.UserNick, u.UserImage, userWantRead = u.UsersReadeds.Count(r => r.ReadUserId == u.UserId), userReviews = u.BooksReviews.Count(r => r.ReviewUserId == u.UserId), UserFollowers = u.UsersFollowerUserFolloweds.Count(f => f.UserFollowedId == u.UserId), userFollowed = u.UsersFollowerUserFollows.Count(f => f.UserFollowId == u.UserId)}).ToListAsync();
-            if (users.Count == 0) return NotFound();
-            else return Ok(users);
+            var user = await ctx.Users.Select(u => new { u.UserId, u.UserNick, u.UserImage }).FirstOrDefaultAsync(u => u.UserId == userId);
+            if (user == null) return NotFound();
+            else return Ok(user);
         }
+
         [HttpGet("followers/{userId}")]
         public async Task<IActionResult> GetFollowers(int userId)
         {
@@ -37,7 +37,7 @@ namespace LibraryAPI.Controllers
         [HttpGet("session/{email}")]
         public async Task<IActionResult> GetSessionData(string email)
         {
-            var user = await ctx.Users.Select(u => new { u.UserId, u.UserNick, u.UserImage, u.UserEmail} ).FirstOrDefaultAsync(u => u.UserEmail == email);
+            var user = await ctx.Users.Select(u => new { u.UserId, u.UserNick, u.UserImage, u.UserEmail, u.UserAdmin } ).FirstOrDefaultAsync(u => u.UserEmail == email);
             if (user == null) return NotFound();
             else return Ok(user);
         }

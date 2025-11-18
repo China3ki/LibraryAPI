@@ -25,13 +25,6 @@ namespace LibraryAPI.Controllers
             if (author == null) return NotFound();
             else return Ok(author);
         }
-        [HttpGet("search/{name}")]
-        public async Task<IActionResult> GetAuthorsForSearch(string name)
-        {
-            var authors = await ctx.Authors.Where(a => a.AuthorName.Contains(name) || a.AuthorSurname.Contains(name)).Select(a => new { a.AuthorId, a.AuthorName, a.AuthorSurname, a.AuthorImage, bookCreated = a.Books.Count(b => b.BookAuthorId == a.AuthorId) }).Take(5).ToListAsync();
-            if (authors.Count == 0) return NotFound();
-            else return Ok(authors);
-        }
         [HttpPost]
         public async Task<IActionResult> AddAuthor([Required] AuthorDto newAuthor)
         {

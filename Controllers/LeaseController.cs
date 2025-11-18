@@ -22,7 +22,7 @@ namespace LibraryAPI.Controllers
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetLease(int userId)
         {
-            var lease = await ctx.BooksLeaseds.Select(l => new { l.LeaseId, l.LeaseUser.UserId, l.LeaseBook.BookTitle, l.LeaseStartDate, l.LeaseEndDate }).Where(i => i.UserId == userId).ToListAsync();
+            var lease = await ctx.BooksLeaseds.Select(l => new { l.LeaseId, l.LeaseUser.UserId, l.LeaseBook.BookCover, l.LeaseBook.BookTitle, l.LeaseStartDate, l.LeaseEndDate }).Where(i => i.UserId == userId).ToListAsync();
             if (lease.Count == 0) return NotFound();
             else return Ok(lease);
         }

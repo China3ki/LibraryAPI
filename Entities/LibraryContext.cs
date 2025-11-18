@@ -28,11 +28,17 @@ public partial class LibraryContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
+    public virtual DbSet<UsersFavourite> UsersFavourites { get; set; }
+
     public virtual DbSet<UsersFollower> UsersFollowers { get; set; }
 
     public virtual DbSet<UsersReaded> UsersReadeds { get; set; }
 
     public virtual DbSet<UsersType> UsersTypes { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseMySql("server=localhost;uid=user;database=library", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.4.32-mariadb"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -190,11 +196,10 @@ public partial class LibraryContext : DbContext
 
             entity.ToTable("users");
 
-            entity.HasIndex(e => e.UserType, "fk_user_type");
-
             entity.Property(e => e.UserId)
                 .HasColumnType("int(11)")
                 .HasColumnName("user_id");
+            entity.Property(e => e.UserAdmin).HasColumnName("user_admin");
             entity.Property(e => e.UserEmail)
                 .HasMaxLength(50)
                 .HasColumnName("user_email");
@@ -214,13 +219,35 @@ public partial class LibraryContext : DbContext
             entity.Property(e => e.UserSurname)
                 .HasMaxLength(50)
                 .HasColumnName("user_surname");
-            entity.Property(e => e.UserType)
-                .HasColumnType("int(11)")
-                .HasColumnName("user_type");
+        });
 
-            entity.HasOne(d => d.UserTypeNavigation).WithMany(p => p.Users)
-                .HasForeignKey(d => d.UserType)
-                .HasConstraintName("fk_user_type");
+        modelBuilder.Entity<UsersFavourite>(entity =>
+        {
+            entity.HasKey(e => e.FavouriteId).HasName("PRIMARY");
+
+            entity.ToTable("users_favourite");
+
+            entity.HasIndex(e => e.FavouriteBookId, "fk_favourite_book");
+
+            entity.HasIndex(e => e.FavouriteUserId, "fk_favourite_user");
+
+            entity.Property(e => e.FavouriteId)
+                .HasColumnType("int(11)")
+                .HasColumnName("favourite_id");
+            entity.Property(e => e.FavouriteBookId)
+                .HasColumnType("int(11)")
+                .HasColumnName("favourite_book_id");
+            entity.Property(e => e.FavouriteUserId)
+                .HasColumnType("int(11)")
+                .HasColumnName("favourite_user_id");
+
+            entity.HasOne(d => d.FavouriteBook).WithMany(p => p.UsersFavourites)
+                .HasForeignKey(d => d.FavouriteBookId)
+                .HasConstraintName("fk_favourite_book");
+
+            entity.HasOne(d => d.FavouriteUser).WithMany(p => p.UsersFavourites)
+                .HasForeignKey(d => d.FavouriteUserId)
+                .HasConstraintName("fk_favourite_user");
         });
 
         modelBuilder.Entity<UsersFollower>(entity =>

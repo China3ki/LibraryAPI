@@ -24,7 +24,7 @@ namespace LibraryAPI.Controllers.Auth
                 UserEmail = user.Email.Trim(),
                 UserPassword = hasher.HashPassword(user.Password),
                 UserJoiningDate = DateOnly.FromDateTime(DateTime.Now),
-                UserType = 1
+                UserAdmin = false
             };
             ctx.Add<User>(newUser);
             await ctx.SaveChangesAsync();

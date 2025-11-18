@@ -29,5 +29,7 @@ public partial class Book
 
     public virtual ICollection<BooksReview> BooksReviews { get; set; } = new List<BooksReview>();
 
+    public virtual ICollection<UsersFavourite> UsersFavourites { get; set; } = new List<UsersFavourite>();
+
     public virtual ICollection<UsersReaded> UsersReadeds { get; set; } = new List<UsersReaded>();
 }

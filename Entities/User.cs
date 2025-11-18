@@ -19,15 +19,15 @@ public partial class User
 
     public DateOnly? UserJoiningDate { get; set; }
 
-    public int? UserType { get; set; }
-
     public string? UserImage { get; set; }
+
+    public bool UserAdmin { get; set; }
 
     public virtual ICollection<BooksLeased> BooksLeaseds { get; set; } = new List<BooksLeased>();
 
     public virtual ICollection<BooksReview> BooksReviews { get; set; } = new List<BooksReview>();
 
-    public virtual UsersType? UserTypeNavigation { get; set; }
+    public virtual ICollection<UsersFavourite> UsersFavourites { get; set; } = new List<UsersFavourite>();
 
     public virtual ICollection<UsersFollower> UsersFollowerUserFolloweds { get; set; } = new List<UsersFollower>();
 
